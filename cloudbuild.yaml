@@ -1,0 +1,18 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/vertexai-project-447608/bank-campaign-model', '.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/vertexai-project-447608/bank-campaign-model']
+
+- name: 'gcr.io/cloud-builders/git'
+  args: ['clone', 'https://github.com/sidoncloud/model-training-repo.git']
+
+- name: 'gcr.io/cloud-builders/gsutil'
+  args: ['cp', 'model-training-repo/bank_campaign_model_training.py', 'gs://us-central1-mlops-airflow-faa6f9bc-bucket/dags']
+
+images:
+- 'gcr.io/vertexai-project-447608/bank-campaign-model'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
